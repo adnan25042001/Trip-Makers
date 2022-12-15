@@ -18,6 +18,8 @@ import com.masai.repository.AdminDao;
 import com.masai.repository.CustomerDao;
 import com.masai.repository.UserSessionDao;
 
+import net.bytebuddy.utility.RandomString;
+
 @Service
 public class LoginSignupServiceImpl implements LoginSignupService {
 
@@ -46,11 +48,11 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 			}
 
 			SessionDTO sdt = new SessionDTO();
-			sdt.setAuthkey(UUID.randomUUID().toString());
+			sdt.setAuthkey(RandomString.make(6));
 			sdt.setSessionTime(LocalDateTime.now());
 			
 			CurrentUserSession cus = new CurrentUserSession();
-			cus.setAuthkey(sdt.getAuthkey());
+			cus.setAuthKey(sdt.getAuthkey());
 			cus.setEmail(user.getEmail());
 			cus.setSessionTime(sdt.getSessionTime());
 			
@@ -71,11 +73,11 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 			}
 
 			SessionDTO sdt = new SessionDTO();
-			sdt.setAuthkey(UUID.randomUUID().toString());
+			sdt.setAuthkey(RandomString.make(6));
 			sdt.setSessionTime(LocalDateTime.now());
 			
 			CurrentUserSession cus = new CurrentUserSession();
-			cus.setAuthkey(sdt.getAuthkey());
+			cus.setAuthKey(sdt.getAuthkey());
 			cus.setEmail(user.getEmail());
 			cus.setSessionTime(sdt.getSessionTime());
 			
@@ -100,13 +102,13 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 		} else {
 
-			sdt.setAuthkey(UUID.randomUUID().toString());
+			sdt.setAuthkey(RandomString.make(6));
 			sdt.setSessionTime(LocalDateTime.now());
 
 			cdao.save(customer);
 			
 			CurrentUserSession cus = new CurrentUserSession();
-			cus.setAuthkey(sdt.getAuthkey());
+			cus.setAuthKey(sdt.getAuthkey());
 			cus.setEmail(customer.getEmail());
 			cus.setSessionTime(sdt.getSessionTime());
 			
@@ -131,13 +133,13 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 		} else {
 
-			sdt.setAuthkey(UUID.randomUUID().toString());
+			sdt.setAuthkey(RandomString.make(6));
 			sdt.setSessionTime(LocalDateTime.now());
 
 			adao.save(admin);
 			
 			CurrentUserSession cus = new CurrentUserSession();
-			cus.setAuthkey(sdt.getAuthkey());
+			cus.setAuthKey(sdt.getAuthkey());
 			cus.setEmail(admin.getEmail());
 			cus.setSessionTime(sdt.getSessionTime());
 			

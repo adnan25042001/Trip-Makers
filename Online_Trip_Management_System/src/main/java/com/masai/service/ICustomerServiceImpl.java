@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
+import org.springframework.stereotype.Service;
 
 import com.masai.exception.CustomerException;
 import com.masai.model.CurrentUserSession;
@@ -20,6 +21,7 @@ import com.masai.model.CustomerDto;
 import com.masai.repository.CustomerDao;
 import com.masai.repository.UserSessionDao;
 
+@Service
 public class ICustomerServiceImpl implements ICustomerService {
 
 	@Autowired

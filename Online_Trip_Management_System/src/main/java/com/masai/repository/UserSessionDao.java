@@ -11,7 +11,7 @@ import com.masai.model.CurrentUserSession;
 @Repository
 public interface UserSessionDao extends JpaRepository<CurrentUserSession, Integer>{
 	
-	public Optional<CurrentUserSession> findByAuthKey(String authKey);
+	public Optional<CurrentUserSession> findByAuthKey(String authkey);
 	
 	public List<CurrentUserSession> findByEmail(String email);
 
