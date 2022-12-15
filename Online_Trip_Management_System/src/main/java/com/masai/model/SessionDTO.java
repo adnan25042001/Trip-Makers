@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class SessionDTO {
 	
-	private Integer authkey;
+	private String authkey;
 	private LocalDateTime sessionTime;
 	
 }

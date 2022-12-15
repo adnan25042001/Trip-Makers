@@ -30,9 +30,9 @@ public class Mycontroller {
 	}
 	
 	@PostMapping("/signup")
-	public ResponseEntity<SessionDTO> signupHandler(@RequestBody Customer customer){
+	public ResponseEntity<SessionDTO> signupHandler(@Valid @RequestBody Customer customer){
 		
-		SessionDTO sdt = lss.signup(customer);
+		SessionDTO sdt = lss.customerSignup(customer);
 		
 		return new ResponseEntity<SessionDTO>(sdt, HttpStatus.CREATED);
 		

@@ -35,12 +35,15 @@ public class Admin {
 
 	@NotBlank
 	@NotEmpty
-	@Size(min = 3, max = 20, message = "Address shuld contain minimum 3 and maximum 30 character")
+	@Size(min = 3, max = 30, message = "Address shuld contain minimum 3 and maximum 30 character")
 	private String address;
 
 	@Pattern(regexp = "[A-Za-z0-9@]{6,15}", message = "Password must be 6 to 15 characters and must have at least 1 alphabate and 1 number")
 	private String password;
-	
 
+	@NotBlank
+	@NotEmpty
+	@Size(min = 3, max = 30, message = "Address shuld contain minimum 3 and maximum 30 character")
+	private String companyName;
 
 }
