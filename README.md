@@ -1,7 +1,7 @@
 # Trip Makers - An Online Trip Management System
 
 
-![Logo](https://i.ibb.co/M2TvhHG/TG.jpg)
+![Logo](https://drive.google.com/drive/my-drive)
 
 
 ## About
