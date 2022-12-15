@@ -1,5 +1,6 @@
 package com.masai.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,7 @@ import com.masai.model.CurrentUserSession;
 public interface UserSessionDao extends JpaRepository<CurrentUserSession, Integer>{
 	
 	public Optional<CurrentUserSession> findByAuthKey(String authKey);
+	
+	public List<CurrentUserSession> findByEmail(String email);
 
 }
