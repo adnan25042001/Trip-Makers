@@ -1,6 +1,6 @@
 # Trip Makers - An Online Trip Management System
 
-![TripMakersLogo](https://user-images.githubusercontent.com/78552012/207929844-8fddafaf-ac51-4233-83d7-3408552127e5.png)
+![TripMakersLogo](https://user-images.githubusercontent.com/78552012/207930728-dedbd47c-cdcd-402f-b7e4-28a7898ec386.png)
 
 
 ## About
