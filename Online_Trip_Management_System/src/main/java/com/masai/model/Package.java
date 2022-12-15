@@ -11,34 +11,34 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Entity
 public class Package {
 
-	private Integer packageId;
-
-	@NotNull(message = "Package name is mandatory")
-	@NotBlank
-	@NotEmpty
-	@Size(min = 5, max = 15, message = "Package name should be of 5-7 charecters")
-	private String packageName;
-
-	@NotNull(message = "Package type should be mandatory")
-	@NotBlank
-	@NotEmpty
-	@Size(min = 5, max = 10, message = "Package Type should be of 5-10 charecters")
-	private String packageType;
-
-	@NotNull(message = " is mandatory")
-	@NotBlank
-	@NotEmpty
-	@Size(min = 5, max = 10, message = "Package Description should be of 5-50 charecters")
-	private String packageDescription;
-
-	@NotNull
-	@NotBlank
-	@NotEmpty
-	private Integer packageCost;
+//	private Integer packageId;
+//
+//	@NotNull(message = "Package name is mandatory")
+//	@NotBlank
+//	@NotEmpty
+//	@Size(min = 5, max = 15, message = "Package name should be of 5-7 charecters")
+//	private String packageName;
+//
+//	@NotNull(message = "Package type should be mandatory")
+//	@NotBlank
+//	@NotEmpty
+//	@Size(min = 5, max = 10, message = "Package Type should be of 5-10 charecters")
+//	private String packageType;
+//
+//	@NotNull(message = " is mandatory")
+//	@NotBlank
+//	@NotEmpty
+//	@Size(min = 5, max = 10, message = "Package Description should be of 5-50 charecters")
+//	private String packageDescription;
+//
+//	@NotNull
+//	@NotBlank
+//	@NotEmpty
+//	private Integer packageCost;
 
 }

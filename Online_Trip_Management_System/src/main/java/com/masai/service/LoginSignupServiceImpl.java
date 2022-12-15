@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masai.exception.UserExcepotion;
+import com.masai.exception.CustomerException;
 import com.masai.model.Admin;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
@@ -96,7 +96,7 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 		if (opt.isPresent()) {
 
-			throw new UserExcepotion("account already exist with email : " + customer.getEmail());
+			throw new CustomerException("account already exist with email : " + customer.getEmail());
 
 		} else {
 
@@ -127,7 +127,7 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 		if (opt.isPresent()) {
 
-			throw new UserExcepotion("account already exist with email : " + admin.getEmail());
+			throw new CustomerException("account already exist with email : " + admin.getEmail());
 
 		} else {
 
