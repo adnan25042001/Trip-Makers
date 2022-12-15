@@ -13,8 +13,8 @@ import lombok.ToString;
 
 @Data
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
+
+
 
 @Entity
 public class Package {
