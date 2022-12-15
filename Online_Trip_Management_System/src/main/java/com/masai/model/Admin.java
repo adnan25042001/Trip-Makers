@@ -40,7 +40,5 @@ public class Admin {
 
 	@Pattern(regexp = "[A-Za-z0-9@]{6,15}", message = "Password must be 6 to 15 characters and must have at least 1 alphabate and 1 number")
 	private String password;
-	
-	private 
 
 }
