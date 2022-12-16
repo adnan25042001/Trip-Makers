@@ -20,7 +20,7 @@ public class CurrentUserSession {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer sessionId;
-	private String authkey;
+	private String authKey;
 	private String email;
 	private LocalDateTime sessionTime;
 
