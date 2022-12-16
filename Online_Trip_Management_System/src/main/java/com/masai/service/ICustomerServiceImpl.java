@@ -1,5 +1,6 @@
 package com.masai.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.masai.repository.FeedbackDao;
+import com.masai.exception.CustomerException;
+import com.masai.model.Feedback;
 import com.masai.exception.CustomerException;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
@@ -21,6 +25,9 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	private CustomerDao cusDao;
+	
+	@Autowired
+	private FeedbackDao fDao;
 
 	@Autowired
 	private UserSessionDao uSesDao;
@@ -133,4 +140,16 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 	}
 
+	@Override
+	public String giveFeedback(Feedback feedback) throws CustomerException {
+		// TODO Auto-generated method stub
+		Optional<Customer> existedCustomer =cusDao.findById(feedback.getCustomerId());
+		if(existedCustomer.isPresent()) {
+			feedback.setDate(LocalDateTime.now());
+			fDao.save(feedback);
+//			System.out.println(feedback.getDate());
+			return "Thank You for your feedback.";
+		}
+		throw new CustomerException("Please pass a valid userId");
+	}
 }
