@@ -16,6 +16,8 @@ public interface LoginSignupService {
 	
 	public SessionDTO login(UserDTO user);
 	
+	public boolean isLoggedInByUUID(String authKey);
+	
 	public boolean logout(String authKey);
 	
 }

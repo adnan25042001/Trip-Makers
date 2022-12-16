@@ -11,6 +11,7 @@ import com.masai.exception.HotelException;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
 import com.masai.model.Hotel;
+import com.masai.model.HotelDto;
 import com.masai.repository.AdminDao;
 import com.masai.repository.HotelDao;
 import com.masai.repository.UserSessionDao;
@@ -43,7 +44,7 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 	@Override
-	public String deleteHotel(String name, String key) {
+	public String deleteHotel(Integer id, String key) {
 		
 		Optional<CurrentUserSession> opt = uSesDao.findByAuthKey(key);
 		if (opt.isEmpty()) {
@@ -51,7 +52,7 @@ public class HotelServiceImpl implements HotelService {
 		}
 		
 		
-		Optional<Hotel> opth = hotelDao.findByName(name);
+		Optional<Hotel> opth = hotelDao.findById(id);
 		if(opth.isEmpty()) {
 			throw new HotelException("Hotel not found with this name");
 		}
@@ -64,8 +65,23 @@ public class HotelServiceImpl implements HotelService {
 	}
 
 	@Override
-	public Hotel updateHotel(Hotel hotel, String key) {
-		return hotel;
+	public Hotel updateHotel(HotelDto hotel, String key) {
+		Optional<CurrentUserSession> opt = uSesDao.findByAuthKey(key);
+		if (opt.isEmpty()) {
+			throw new HotelException("Invalid Authentication Id of Admin" + key);
+		}
+		Optional<Hotel> hot=hotelDao.findById(hotel.getId());
+		if(hot.isEmpty()) {
+			throw new HotelException("Hotel not found with this Id :"+hotel.getId());
+		}
+		Hotel hotl=hot.get();
+		hotl.setRent(hotel.getRent());
+		hotl.setStatus(hotel.getStatus());
+		hotelDao.save(hotl);
+		
+		return hotl;
+		
+		
 	}
 
 	@Override
@@ -73,7 +89,7 @@ public class HotelServiceImpl implements HotelService {
       List<Hotel> hotels=hotelDao.findAll();
 		
 		if(hotels.size()==0) {
-			throw new CustomerException("Hotels not found");
+			throw new HotelException("Hotels not found");
 		}
 		
 		return hotels;
