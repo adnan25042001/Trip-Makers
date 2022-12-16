@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.masai.exception.AdminException;
 import com.masai.exception.CustomerException;
+import com.masai.exception.LoginException;
 import com.masai.model.Admin;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
@@ -168,6 +169,12 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 		return sdt;
 
+	}
+	@Override
+	public boolean isLoggedInByUUID(String authKey) {
+		Optional<CurrentUserSession> opt = usdao.findByAuthKey(authKey);
+		if(opt.isPresent()) return true;
+		else throw new LoginException("LogIn first!!!");
 	}
 
 	@Override

@@ -18,8 +18,14 @@ public interface LoginSignupService {
 	
 	public SessionDTO loginAdmin(UserDTO user) throws AdminException;
 	
+
+	public boolean isLoggedInByUUID(String authKey);
+	
+	public boolean logout(String authKey);
+
 	public SessionDTO loginCustomer(UserDTO user) throws CustomerException;
 	
 	public String logout(String authKey) throws CustomerException, AdminException;
+
 	
 }

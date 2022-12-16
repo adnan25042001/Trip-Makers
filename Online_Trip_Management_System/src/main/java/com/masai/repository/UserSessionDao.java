@@ -12,6 +12,12 @@ public interface UserSessionDao extends JpaRepository<CurrentUserSession, Intege
 	
 	public Optional<CurrentUserSession> findByAuthKey(String authkey);
 	
+
+	public List<CurrentUserSession> findByEmail(String email);
+	
+	
+
 	public Optional<CurrentUserSession> findByEmail(String email);
+
 
 }

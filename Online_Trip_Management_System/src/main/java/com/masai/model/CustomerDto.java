@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class CustomerDto {
 	
+	
 	@Size(min = 3, max = 20, message = "Name shuld contain minimum 3 and maximum 20 character")
 	private String customerName;
 	
