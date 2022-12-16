@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -52,5 +53,6 @@ public class Package {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(referencedColumnName = "hotelid")
 	private Hotel hotel;
+
 
 }

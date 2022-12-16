@@ -2,14 +2,16 @@ package com.masai.exception;
 
 public class HotelException extends RuntimeException{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public HotelException() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public HotelException(String msg) {
-		super(msg);
-		// TODO Auto-generated constructor stub
 	}
 	
-
+	public HotelException(String msg) {
+		super(msg);
+	}
+	
 }
