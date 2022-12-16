@@ -7,14 +7,18 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masai.exception.UserExcepotion;
+import com.masai.exception.CustomerException;
 import com.masai.model.Admin;
+import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
 import com.masai.model.SessionDTO;
 import com.masai.model.UserDTO;
 import com.masai.model.UserType;
 import com.masai.repository.AdminDao;
 import com.masai.repository.CustomerDao;
+import com.masai.repository.UserSessionDao;
+
+import net.bytebuddy.utility.RandomString;
 
 @Service
 public class LoginSignupServiceImpl implements LoginSignupService {
@@ -22,7 +26,11 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 	@Autowired
 	private CustomerDao cdao;
 
+	@Autowired
 	private AdminDao adao;
+	
+	@Autowired
+	private UserSessionDao usdao;
 
 	@Override
 	public SessionDTO login(UserDTO user) {
@@ -40,8 +48,16 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 			}
 
 			SessionDTO sdt = new SessionDTO();
-			sdt.setAuthkey(UUID.randomUUID().hashCode());
+			sdt.setAuthkey(RandomString.make(6));
 			sdt.setSessionTime(LocalDateTime.now());
+			
+			CurrentUserSession cus = new CurrentUserSession();
+			cus.setAuthKey(sdt.getAuthkey());
+			cus.setEmail(user.getEmail());
+			cus.setSessionTime(sdt.getSessionTime());
+			
+			usdao.save(cus);
+			
 			return sdt;
 
 		} else {
@@ -57,8 +73,16 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 			}
 
 			SessionDTO sdt = new SessionDTO();
-			sdt.setAuthkey(UUID.randomUUID().hashCode());
+			sdt.setAuthkey(RandomString.make(6));
 			sdt.setSessionTime(LocalDateTime.now());
+			
+			CurrentUserSession cus = new CurrentUserSession();
+			cus.setAuthKey(sdt.getAuthkey());
+			cus.setEmail(user.getEmail());
+			cus.setSessionTime(sdt.getSessionTime());
+			
+			usdao.save(cus);
+			
 			return sdt;
 
 		}
@@ -66,7 +90,7 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 	}
 
 	@Override
-	public SessionDTO signup(Customer customer) {
+	public SessionDTO customerSignup(Customer customer) {
 
 		Optional<Customer> opt = cdao.findByEmail(customer.getEmail());
 
@@ -74,19 +98,72 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 		if (opt.isPresent()) {
 
-			throw new UserExcepotion("account already exist with email : " + customer.getEmail());
+			throw new CustomerException("account already exist with email : " + customer.getEmail());
 
 		} else {
 
-			sdt.setAuthkey(UUID.randomUUID().hashCode());
+			sdt.setAuthkey(RandomString.make(6));
 			sdt.setSessionTime(LocalDateTime.now());
 
 			cdao.save(customer);
+			
+			CurrentUserSession cus = new CurrentUserSession();
+			cus.setAuthKey(sdt.getAuthkey());
+			cus.setEmail(customer.getEmail());
+			cus.setSessionTime(sdt.getSessionTime());
+			
+			usdao.save(cus);
 
 			return sdt;
 
 		}
 
+	}
+
+	@Override
+	public SessionDTO adminSignup(Admin admin) {
+		
+		Optional<Admin> opt = adao.findByEmail(admin.getEmail());
+
+		SessionDTO sdt = new SessionDTO();
+
+		if (opt.isPresent()) {
+
+			throw new CustomerException("account already exist with email : " + admin.getEmail());
+
+		} else {
+
+			sdt.setAuthkey(RandomString.make(6));
+			sdt.setSessionTime(LocalDateTime.now());
+
+			adao.save(admin);
+			
+			CurrentUserSession cus = new CurrentUserSession();
+			cus.setAuthKey(sdt.getAuthkey());
+			cus.setEmail(admin.getEmail());
+			cus.setSessionTime(sdt.getSessionTime());
+			
+			usdao.save(cus);
+
+			return sdt;
+
+		}
+		
+	}
+
+	@Override
+	public boolean logout(String authKey) {
+		
+		Optional<CurrentUserSession> opt = usdao.findByAuthKey(authKey);
+		
+		if(opt.isEmpty()) return false;
+		
+		CurrentUserSession cus = opt.get();
+		
+		usdao.delete(cus);
+		
+		return true;
+		
 	}
 
 }
