@@ -22,6 +22,7 @@ public class CurrentUserSession {
 	private Integer sessionId;
 	private String authKey;
 	private String email;
+	private UserType userType;
 	private LocalDateTime sessionTime;
 
 }

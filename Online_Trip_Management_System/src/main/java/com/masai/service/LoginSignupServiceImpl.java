@@ -2,11 +2,11 @@ package com.masai.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.masai.exception.AdminException;
 import com.masai.exception.CustomerException;
 import com.masai.model.Admin;
 import com.masai.model.CurrentUserSession;
@@ -28,64 +28,81 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 	@Autowired
 	private AdminDao adao;
-	
+
 	@Autowired
 	private UserSessionDao usdao;
 
 	@Override
-	public SessionDTO login(UserDTO user) {
+	public SessionDTO loginAdmin(UserDTO user) {
 
-		if (user.getUserType().equals(UserType.ADMIN)) {
+		Optional<Admin> opt = adao.findByEmail(user.getEmail());
 
-			Optional<Admin> opt = adao.findByEmail(user.getEmail());
+		if (opt.isEmpty())
+			throw new AdminException("Admin does not exist with email : " + user.getEmail());
 
-			if (opt.isEmpty()) {
-			}
+		Admin admin = opt.get();
 
-			Admin admin = opt.get();
+		if (admin.getPassword() != user.getPassword())
+			throw new AdminException("Wrong password!");
 
-			if (admin.getPassword() != user.getPassword()) {
-			}
+		Optional<CurrentUserSession> opt1 = usdao.findByEmail(user.getEmail());
 
-			SessionDTO sdt = new SessionDTO();
-			sdt.setAuthkey(RandomString.make(6));
-			sdt.setSessionTime(LocalDateTime.now());
-			
-			CurrentUserSession cus = new CurrentUserSession();
-			cus.setAuthKey(sdt.getAuthkey());
-			cus.setEmail(user.getEmail());
-			cus.setSessionTime(sdt.getSessionTime());
-			
-			usdao.save(cus);
-			
-			return sdt;
+		if (opt1.isPresent())
+			throw new AdminException("Admin already logged in!");
 
-		} else {
+		if (opt1.get().getUserType().equals(UserType.CUSTOMER))
+			throw new AdminException("Wrong email and password!");
 
-			Optional<Customer> opt = cdao.findByEmail(user.getEmail());
+		SessionDTO sdt = new SessionDTO();
+		sdt.setAuthkey(RandomString.make(6));
+		sdt.setSessionTime(LocalDateTime.now());
 
-			if (opt.isEmpty()) {
-			}
+		CurrentUserSession cus = new CurrentUserSession();
+		cus.setAuthKey(sdt.getAuthkey());
+		cus.setEmail(user.getEmail());
+		cus.setSessionTime(sdt.getSessionTime());
+		cus.setUserType(UserType.ADMIN);
 
-			Customer customer = opt.get();
+		usdao.save(cus);
 
-			if (customer.getPassword() != user.getPassword()) {
-			}
+		return sdt;
 
-			SessionDTO sdt = new SessionDTO();
-			sdt.setAuthkey(RandomString.make(6));
-			sdt.setSessionTime(LocalDateTime.now());
-			
-			CurrentUserSession cus = new CurrentUserSession();
-			cus.setAuthKey(sdt.getAuthkey());
-			cus.setEmail(user.getEmail());
-			cus.setSessionTime(sdt.getSessionTime());
-			
-			usdao.save(cus);
-			
-			return sdt;
+	}
 
-		}
+	@Override
+	public SessionDTO loginCustomer(UserDTO user) {
+
+		Optional<Customer> opt = cdao.findByEmail(user.getEmail());
+
+		if (opt.isEmpty())
+			throw new CustomerException("Email not found : " + user.getEmail());
+
+		Customer customer = opt.get();
+
+		if (customer.getPassword() != user.getPassword())
+			throw new CustomerException("Wrong password!");
+
+		Optional<CurrentUserSession> opt1 = usdao.findByEmail(user.getEmail());
+
+		if (opt1.isPresent())
+			throw new AdminException("Customer already logged in!");
+
+		if (opt1.get().getUserType().equals(UserType.ADMIN))
+			throw new AdminException("Wrong email and password!");
+
+		SessionDTO sdt = new SessionDTO();
+		sdt.setAuthkey(RandomString.make(6));
+		sdt.setSessionTime(LocalDateTime.now());
+
+		CurrentUserSession cus = new CurrentUserSession();
+		cus.setAuthKey(sdt.getAuthkey());
+		cus.setEmail(user.getEmail());
+		cus.setSessionTime(sdt.getSessionTime());
+		cus.setUserType(UserType.CUSTOMER);
+
+		usdao.save(cus);
+
+		return sdt;
 
 	}
 
@@ -94,76 +111,78 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 		Optional<Customer> opt = cdao.findByEmail(customer.getEmail());
 
-		SessionDTO sdt = new SessionDTO();
+		Optional<Admin> opt1 = adao.findByEmail(customer.getEmail());
 
-		if (opt.isPresent()) {
-
+		if (opt1.isPresent())
 			throw new CustomerException("account already exist with email : " + customer.getEmail());
 
-		} else {
+		SessionDTO sdt = new SessionDTO();
 
-			sdt.setAuthkey(RandomString.make(6));
-			sdt.setSessionTime(LocalDateTime.now());
+		if (opt.isPresent())
+			throw new CustomerException("account already exist with email : " + customer.getEmail());
 
-			cdao.save(customer);
-			
-			CurrentUserSession cus = new CurrentUserSession();
-			cus.setAuthKey(sdt.getAuthkey());
-			cus.setEmail(customer.getEmail());
-			cus.setSessionTime(sdt.getSessionTime());
-			
-			usdao.save(cus);
+		sdt.setAuthkey(RandomString.make(6));
+		sdt.setSessionTime(LocalDateTime.now());
 
-			return sdt;
+		cdao.save(customer);
 
-		}
+		CurrentUserSession cus = new CurrentUserSession();
+		cus.setAuthKey(sdt.getAuthkey());
+		cus.setEmail(customer.getEmail());
+		cus.setSessionTime(sdt.getSessionTime());
+		cus.setUserType(UserType.CUSTOMER);
+
+		usdao.save(cus);
+
+		return sdt;
 
 	}
 
 	@Override
 	public SessionDTO adminSignup(Admin admin) {
-		
+
 		Optional<Admin> opt = adao.findByEmail(admin.getEmail());
+
+		Optional<Customer> opt1 = cdao.findByEmail(admin.getEmail());
+
+		if (opt1.isPresent())
+			throw new AdminException("account already exist with email : " + admin.getEmail());
 
 		SessionDTO sdt = new SessionDTO();
 
-		if (opt.isPresent()) {
+		if (opt.isPresent())
+			throw new AdminException("account already exist with email : " + admin.getEmail());
 
-			throw new CustomerException("account already exist with email : " + admin.getEmail());
+		sdt.setAuthkey(RandomString.make(6));
+		sdt.setSessionTime(LocalDateTime.now());
 
-		} else {
+		adao.save(admin);
 
-			sdt.setAuthkey(RandomString.make(6));
-			sdt.setSessionTime(LocalDateTime.now());
+		CurrentUserSession cus = new CurrentUserSession();
+		cus.setAuthKey(sdt.getAuthkey());
+		cus.setEmail(admin.getEmail());
+		cus.setSessionTime(sdt.getSessionTime());
+		cus.setUserType(UserType.ADMIN);
 
-			adao.save(admin);
-			
-			CurrentUserSession cus = new CurrentUserSession();
-			cus.setAuthKey(sdt.getAuthkey());
-			cus.setEmail(admin.getEmail());
-			cus.setSessionTime(sdt.getSessionTime());
-			
-			usdao.save(cus);
+		usdao.save(cus);
 
-			return sdt;
+		return sdt;
 
-		}
-		
 	}
 
 	@Override
-	public boolean logout(String authKey) {
-		
+	public String logout(String authKey) {
+
 		Optional<CurrentUserSession> opt = usdao.findByAuthKey(authKey);
-		
-		if(opt.isEmpty()) return false;
-		
+
+		if (opt.isEmpty()) throw new RuntimeException("User alresdy logged out!");
+
 		CurrentUserSession cus = opt.get();
-		
+
 		usdao.delete(cus);
-		
-		return true;
-		
+
+		return "Logged out...";
+
 	}
 
 }

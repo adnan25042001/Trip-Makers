@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.masai.exception.PackageException;
 import com.masai.repository.PackageRepository;
+import com.masai.model.Package;
 
 @Service
 public class PackageServiceImpl implements PackageService{
