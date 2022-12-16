@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.masai.model.CurrentUserSession;
 
 @Repository
-public interface UserSessionDao extends JpaRepository<CurrentUserSession, Integer>{
-	
+public interface UserSessionDao extends JpaRepository<CurrentUserSession, Integer> {
+
 	public Optional<CurrentUserSession> findByAuthKey(String authKey);
 
 }
