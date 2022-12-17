@@ -1,13 +1,16 @@
 package com.masai.model;
 
-import java.util.List;
 
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -50,6 +53,10 @@ public class Package {
 	@NotBlank
 	@NotEmpty
 	private Integer packageCost;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(referencedColumnName = "hotelid")
+	private Hotel hotel;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Customer> customer; 

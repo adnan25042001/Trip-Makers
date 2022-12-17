@@ -1,23 +1,22 @@
 package com.masai.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Service;
 
+import com.masai.repository.FeedbackDao;
+import com.masai.exception.CustomerException;
+import com.masai.model.Feedback;
 import com.masai.exception.CustomerException;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
 
 import com.masai.model.CustomerDto;
+import com.masai.model.UserType;
 import com.masai.repository.CustomerDao;
 import com.masai.repository.UserSessionDao;
 
@@ -26,6 +25,9 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	private CustomerDao cusDao;
+	
+	@Autowired
+	private FeedbackDao fDao;
 
 	@Autowired
 	private UserSessionDao uSesDao;
@@ -36,13 +38,18 @@ public class ICustomerServiceImpl implements ICustomerService {
 		if (optCurrcustomer.isEmpty()) {
 			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
 		}
-		CurrentUserSession cnew = new CurrentUserSession();
+		CurrentUserSession cnew = optCurrcustomer.get();
+		
+		if(cnew.getUserType().equals(UserType.ADMIN)) throw new CustomerException("Customer not found with email : " + cnew.getEmail());
 
 		Optional<Customer> customer = cusDao.findByEmail(cnew.getEmail());
 		if (customer.isEmpty()) {
-			throw new CustomerException("Customer not found with Id");
+			throw new CustomerException("Customer not found with email " + cnew.getEmail());
 		}
 		Customer cust = customer.get();
+		
+		
+		
 		if (!cusDto.getCustomerName().equals(null)) {
 			cust.setName(cusDto.getCustomerName());
 
@@ -52,14 +59,7 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 		}
 		if (!cusDto.getEmail().equals(null)) {
-
-			List<CurrentUserSession> lCus = uSesDao.findByEmail(cnew.getEmail());
-			for (int i = 0; i < lCus.size(); i++) {
-				lCus.get(i).setEmail(cusDto.getEmail());
-				uSesDao.save(lCus.get(i));
-			}
-
-			cust.setEmail(cusDto.getEmail());
+			cnew.setEmail(cusDto.getEmail());
 
 		}
 		if (!cusDto.getMobile().equals(null)) {
@@ -82,25 +82,21 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 		Optional<CurrentUserSession> cnew = uSesDao.findByAuthKey(key);
 		if (cnew.isEmpty()) {
-			throw new CustomerException("Customer is not login with this details :" + key);
+			throw new CustomerException("Customer is not logged in");
 		}
 
-		CurrentUserSession curr = new CurrentUserSession();
-
-		List<CurrentUserSession> lCus = uSesDao.findByEmail(curr.getEmail());
+		CurrentUserSession curr = cnew.get();
 
 		Optional<Customer> opt = cusDao.findByEmail(curr.getEmail());
 
 		if (opt.isEmpty()) {
-			throw new CustomerException("Customer is not login with this email");
+			throw new CustomerException("Customer not found with email : " + curr.getEmail());
 		}
 
 		cusDao.delete(opt.get());
 
-		for (int i = 0; i < lCus.size(); i++) {
-
-			uSesDao.delete(lCus.get(i));
-		}
+		uSesDao.delete(curr);
+		
 		return "Customer Deleted Successfully";
 
 	}
@@ -144,4 +140,16 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 	}
 
+	@Override
+	public String giveFeedback(Feedback feedback) throws CustomerException {
+		// TODO Auto-generated method stub
+		Optional<Customer> existedCustomer =cusDao.findById(feedback.getCustomerId());
+		if(existedCustomer.isPresent()) {
+			feedback.setDate(LocalDateTime.now());
+			fDao.save(feedback);
+//			System.out.println(feedback.getDate());
+			return "Thank You for your feedback.";
+		}
+		throw new CustomerException("Please pass a valid userId");
+	}
 }

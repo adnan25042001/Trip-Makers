@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -28,7 +27,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Customer {
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer customerId;
 
 	@NotBlank
@@ -48,8 +48,7 @@ public class Customer {
 	@Size(min = 3, max = 20, message = "Address shuld contain minimum 3 and maximum 30 character")
 	private String address;
 
-//	@Min(value = 6)
-//	@Pattern(regexp = "[A-Za-z0-9]{15}", message = "Password must be 6 to 15 characters and must have at least 1 alphabate and 1 number")
+	@Pattern(regexp = "^(^[a-zA-Z0-9]{4,12}$)", message = "password must contain atleast 1 uppercase, 1 lowercase, and 1 digit ")
 	private String password;
 	
 	@ManyToMany

@@ -3,6 +3,7 @@ package com.masai.service;
 import java.util.List;
 import com.masai.model.Package;
 
+import com.masai.model.Package;
 import com.masai.exception.PackageException;
 import com.masai.model.*;
 public interface PackageService {

@@ -2,13 +2,16 @@ package com.masai.exception;
 
 public class PackageException extends Exception {
 
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public PackageException() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public PackageException(String msg) {
-		// TODO Auto-generated constructor stub
 		super(msg);
 	}
+	
 }

@@ -26,6 +26,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Data
 public class Booking {
      
 	@Id
@@ -49,11 +50,10 @@ public class Booking {
 	@NotNull(message="Date should be mandatory")
 	@NotBlank @NotEmpty
 	private LocalDateTime date;
-	
+  
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Customer> customers ;
 
-	
 	
 	
 }
