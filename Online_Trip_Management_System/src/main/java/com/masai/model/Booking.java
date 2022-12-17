@@ -1,11 +1,14 @@
 package com.masai.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,7 +22,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Data
 public class Booking {
@@ -45,9 +50,9 @@ public class Booking {
 	@NotNull(message="Date should be mandatory")
 	@NotBlank @NotEmpty
 	private LocalDateTime date;
-
-	
-	
+  
+	@ManyToMany(cascade = CascadeType.ALL)
+	private List<Customer> customers ;
 
 	
 	
