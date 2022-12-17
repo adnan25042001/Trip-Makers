@@ -12,26 +12,24 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BookingException.class)
-	public ResponseEntity<MyErrDetails> bookingExceptionhandler(BookingException ie, WebRequest req){
-		
-		MyErrDetails err = new MyErrDetails();
-		err.setTimestamp(LocalDateTime.now());
-		err.setMessege(ie.getMessage());
+	public ResponseEntity<ExceptionDetails> bookingExceptionhandler(BookingException ie, WebRequest req) {
+
+		ExceptionDetails err = new ExceptionDetails();
+		err.setTimeStamp(LocalDateTime.now());
+		err.setMessage(ie.getMessage());
 		err.setDetails(req.getDescription(false));
-		
-		return new ResponseEntity<MyErrDetails>(err,HttpStatus.BAD_GATEWAY);
+
+		return new ResponseEntity<ExceptionDetails>(err, HttpStatus.BAD_GATEWAY);
 	}
-	
-	
-	
+
 	@ExceptionHandler(PackageException.class)
-	public ResponseEntity<MyErrDetails> PackageExceptionhandler(PackageException ie, WebRequest req){
-		
-		MyErrDetails err = new MyErrDetails();
-		err.setTimestamp(LocalDateTime.now());
-		err.setMessege(ie.getMessage());
+	public ResponseEntity<ExceptionDetails> PackageExceptionhandler(PackageException ie, WebRequest req) {
+
+		ExceptionDetails err = new ExceptionDetails();
+		err.setTimeStamp(LocalDateTime.now());
+		err.setMessage(ie.getMessage());
 		err.setDetails(req.getDescription(false));
-		
-		return new ResponseEntity<MyErrDetails>(err,HttpStatus.BAD_GATEWAY);
+
+		return new ResponseEntity<ExceptionDetails>(err, HttpStatus.BAD_GATEWAY);
 	}
 }

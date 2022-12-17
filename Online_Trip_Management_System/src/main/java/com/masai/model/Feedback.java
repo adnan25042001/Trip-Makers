@@ -9,17 +9,12 @@ import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.GenerationTime;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
-
 import lombok.Data;
 
 @Entity
 @Data
 public class Feedback {
 
-	//id refers to customer Id.By which admin can find which customer give this feedback;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -33,6 +28,6 @@ public class Feedback {
 	@Max(value =  5,message = "please rate us in between 0 to 5")
 	private Integer rating;
 	
-	
 	private LocalDateTime date;
+	
 }

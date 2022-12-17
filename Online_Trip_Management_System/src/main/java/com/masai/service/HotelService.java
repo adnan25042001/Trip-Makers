@@ -9,9 +9,9 @@ public interface HotelService {
 	
 	public Hotel addHotel(Hotel hotel,String key);
 	
-	public String deleteHotel(Integer id,String key);
+	public String deleteHotel(Integer hotelId, String key);
 	
-	public Hotel updateHotel(HotelDto hotel,String key);
+	public Hotel updateHotel(HotelDto hotelDto, String key);
 	
 	public List<Hotel> viewAllHotel();
 

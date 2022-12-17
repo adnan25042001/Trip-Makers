@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UserDto {
 	
 	@NotBlank @NotEmpty @Size(min = 3, max = 20, message = "Name shuld contain minimum 3 and maximum 20 character")
 	private String email;

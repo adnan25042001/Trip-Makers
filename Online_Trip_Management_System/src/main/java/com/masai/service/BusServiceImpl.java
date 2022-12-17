@@ -55,10 +55,11 @@ public class BusServiceImpl implements BusService {
 
 		if (cus.getUserType().equals(UserType.CUSTOMER))
 			throw new AdminException("Invalid authkey : " + authKey);
-		
+
 		Optional<Bus> opt1 = bdao.findByBusNo(busNo);
-		
-		if(opt1.isEmpty()) throw new BusException("Bus not found with busNo. : " + busNo);
+
+		if (opt1.isEmpty())
+			throw new BusException("Bus not found with busNo. : " + busNo);
 
 		bdao.delete(opt1.get());
 
@@ -68,28 +69,33 @@ public class BusServiceImpl implements BusService {
 
 	@Override
 	public Bus getBusByBusNo(String busNo, String authKey) throws BusException {
-		
+
 		Optional<CurrentUserSession> opt = usdao.findByAuthKey(authKey);
-		
-		if(opt.isEmpty()) throw new RuntimeException("Invalid authKey : " + authKey);
-		
+
+		if (opt.isEmpty())
+			throw new RuntimeException("Invalid authKey : " + authKey);
+
 		Optional<Bus> opt1 = bdao.findByBusNo(busNo);
-		
-		if(opt1.isEmpty()) throw new BusException("Bus not found with busNo : " + busNo);
-		
+
+		if (opt1.isEmpty())
+			throw new BusException("Bus not found with busNo : " + busNo);
+
 		return opt1.get();
-		
+
 	}
 
 	@Override
 	public List<Bus> getAllBus(String authKey) throws BusException {
-		
+
+		usdao.findByAuthKey(authKey).orElseThrow(() -> new RuntimeException("User not logged in!"));
+
 		List<Bus> buses = bdao.findAll();
-		
-		if(buses.size() == 0) throw new BusException("Bus not found!");
-		
+
+		if (buses.size() == 0)
+			throw new BusException("Bus not found!");
+
 		return buses;
-		
+
 	}
 
 	@Override
