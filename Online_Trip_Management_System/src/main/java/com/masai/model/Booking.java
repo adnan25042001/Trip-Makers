@@ -14,19 +14,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.GeneratorType;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Data
 public class Booking {
      
 	@Id
@@ -53,7 +48,5 @@ public class Booking {
   
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Customer> customers ;
-
-	
 	
 }

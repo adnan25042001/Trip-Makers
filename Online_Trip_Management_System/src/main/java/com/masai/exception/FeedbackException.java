@@ -1,13 +1,16 @@
 package com.masai.exception;
 
-public class FeedbackException extends RuntimeException{
+public class FeedbackException extends RuntimeException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public FeedbackException() {
-		// TODO Auto-generated constructor stub
 	}
-	
+
 	public FeedbackException(String message) {
-		// TODO Auto-generated constructor stub
 		super(message);
 	}
 }

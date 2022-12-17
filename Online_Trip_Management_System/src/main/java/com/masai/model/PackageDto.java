@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PackageDto {
+
 	private Integer packageId;
 	private String packageName;
 	private String packageType;
 	private String packageDescription;
 	private Integer packageCost;
 
-	
 }
