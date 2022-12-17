@@ -1,9 +1,12 @@
 package com.masai.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -12,6 +15,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CascadeType;
+
+import com.masai.model.Package;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,5 +51,11 @@ public class Customer {
 //	@Min(value = 6)
 //	@Pattern(regexp = "[A-Za-z0-9]{15}", message = "Password must be 6 to 15 characters and must have at least 1 alphabate and 1 number")
 	private String password;
+	
+	@ManyToMany
+	private List<Package> packages;
+	
+	@ManyToMany
+	private List<Booking> bookings;
 
 }
