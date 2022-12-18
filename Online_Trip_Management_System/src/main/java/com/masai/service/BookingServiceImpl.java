@@ -10,12 +10,10 @@ import com.masai.exception.BookingException;
 import com.masai.exception.CustomerException;
 import com.masai.exception.PackageException;
 import com.masai.model.Booking;
-import com.masai.model.BookingDto;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
 import com.masai.model.Package;
 import com.masai.model.PackageDto;
-import com.masai.model.UserType;
 import com.masai.repository.BookingDao;
 import com.masai.repository.CustomerDao;
 import com.masai.repository.PackageDao;
@@ -34,6 +32,7 @@ public class BookingServiceImpl implements BookingService {
 	private UserSessionDao uSesDao;
 	@Autowired
 	private PackageDao pdao;
+
 	@Override
 	public PackageDto bookPackage(Integer packageId, String key) throws PackageException {
 
@@ -56,17 +55,16 @@ public class BookingServiceImpl implements BookingService {
 
 		PackageDto packagedto = pdao.getPackageDto(packageId);
 		return packagedto;
-		
+
 	}
 
 	@Override
 	public String cancelPackage(Integer packageId, String key) throws PackageException {
-		
+
 		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
-		
-		if (optCurrcustomer.isEmpty()) 
+
+		if (optCurrcustomer.isEmpty())
 			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
-	
 
 		Customer customer = cdao.findByEmail(optCurrcustomer.get().getEmail())
 				.orElseThrow(() -> new CustomerException("Customer does not exist"));
@@ -75,17 +73,15 @@ public class BookingServiceImpl implements BookingService {
 				.orElseThrow(() -> new PackageException("Package does not exist with packageId:- " + packageId));
 
 		customer.getPackages().remove(p);
-		
+
 		cdao.save(customer);
-		
+
 		return "Package Removed Successfully";
-		
+
 	}
 
-
-
 	@Override
-	public Booking viewBooking(Integer bookingId,String key) throws BookingException {
+	public Booking viewBooking(Integer bookingId, String key) throws BookingException {
 
 		return bDao.findById(bookingId).orElseThrow(() -> new BookingException("BOokingId is not available"));
 
@@ -103,7 +99,5 @@ public class BookingServiceImpl implements BookingService {
 			throw new BookingException("Not found");
 
 	}
-
-	
 
 }

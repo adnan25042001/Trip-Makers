@@ -29,7 +29,7 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	private UserSessionDao uSesDao;
-	
+
 //	for customer only
 
 	@Override
@@ -41,7 +41,6 @@ public class ICustomerServiceImpl implements ICustomerService {
 			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
 
 		CurrentUserSession cnew = optCurrcustomer.get();
-		
 
 		if (cnew.getUserType().equals(UserType.ADMIN))
 			throw new CustomerException("Customer not found with email : " + cnew.getEmail());
@@ -67,9 +66,8 @@ public class ICustomerServiceImpl implements ICustomerService {
 		if (!cusDto.getMobile().equals(null)) {
 			cust.setMobile(cusDto.getMobile());
 		}
-		
 
-		Customer c=cusDao.save(cust);
+		Customer c = cusDao.save(cust);
 		CustomerDto cDto = new CustomerDto();
 		cDto.setAddress(c.getAddress());
 		cDto.setCustomerName(c.getName());
@@ -81,44 +79,37 @@ public class ICustomerServiceImpl implements ICustomerService {
 		return cDto;
 
 	}
-	
 
-
-	
-	
 //	both for admin and customer
 
 	@Override
-	public CustomerDto viewCustomerbyEmail(String email,String key) {
-		
+	public CustomerDto viewCustomerbyEmail(String email, String key) {
+
 		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
 
 		if (optCurrcustomer.isEmpty())
 			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
 
 		CurrentUserSession cnew = optCurrcustomer.get();
-             
+
 		Optional<CustomerDto> opt = cusDao.getCustomerDtoByEmail(email);
 
 		return opt.orElseThrow(() -> new CustomerException("Customer not found"));
 
 	}
-	
+
 //	for admin only
 
 	@Override
 	public List<CustomerDto> viewallCustomer(String key) {
-		
 
 		Optional<CurrentUserSession> cnew = uSesDao.findByAuthKey(key);
-		
-		
 
 		if (cnew.isEmpty())
 			throw new CustomerException("Customer is not logged in");
 
 		CurrentUserSession curr = cnew.get();
-		
+
 		if (curr.getUserType().equals(UserType.CUSTOMER))
 			throw new CustomerException("Customer not found with email : " + curr.getEmail());
 
@@ -131,23 +122,21 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 	}
 
-	
-	//Rajibul
+	// Rajibul
 	@Override
-	public String giveFeedback(Feedback feedback,String key) throws CustomerException {
-		
+	public String giveFeedback(Feedback feedback, String key) throws CustomerException {
+
 		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
-		
-		if(optCurrcustomer.isPresent()) {
-			
+
+		if (optCurrcustomer.isPresent()) {
+
 			CurrentUserSession cnew = optCurrcustomer.get();
-			
+
 			if (cnew.getUserType().equals(UserType.ADMIN))
 				throw new CustomerException("Please log in as a User");
 
 			Optional<Customer> existedCustomer = cusDao.findByEmail(cnew.getEmail());
-			
-			
+
 			if (existedCustomer.isPresent()) {
 				feedback.setDate(LocalDateTime.now());
 				fDao.save(feedback);
@@ -155,9 +144,7 @@ public class ICustomerServiceImpl implements ICustomerService {
 			}
 		}
 
-		
-		
 		throw new CustomerException("Invalid Authentication Id of Customer :" + key);
-		
+
 	}
 }

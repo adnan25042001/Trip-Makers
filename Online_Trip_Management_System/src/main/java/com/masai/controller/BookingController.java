@@ -1,6 +1,5 @@
 package com.masai.controller;
 
-import java.awt.print.Book;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,11 +17,8 @@ import com.masai.model.BookingDto;
 import com.masai.model.PackageDto;
 import com.masai.service.BookingService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-
 @RestController
 @RequestMapping("/booking")
-
 public class BookingController {
 	
 	@Autowired
@@ -33,6 +28,7 @@ public class BookingController {
 //	public ResponseEntity<Booking> makebooking(@RequestBody Booking booking ){
 //		
 //	}
+	
 	@GetMapping("/viewBooking/{id}/{key}")
 	public ResponseEntity<Booking> viewBooKing(@PathVariable("id") Integer bookingId, @PathVariable("key")String key ) throws BookingException{
 		
@@ -62,6 +58,5 @@ public class BookingController {
 	return new ResponseEntity<String>(b,HttpStatus.OK);
 	
     }
-	
-	
+		
 }

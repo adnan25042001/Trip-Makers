@@ -23,8 +23,8 @@ public class AdminController {
 	@Autowired
 	private AdminService aService;
 
-	@GetMapping("/{email}/{key}")
-	public ResponseEntity<CustomerDto> getCustomerByEmailHandler(@Valid @PathVariable("email") String email,@PathVariable("key") String key) {
+	@GetMapping("/{authKey}/{email}")
+	public ResponseEntity<CustomerDto> getCustomerByEmailHandler(@PathVariable("email") String email, @PathVariable("authKey") String key) {
 
 		CustomerDto customer = aService.getCustomerByEmail(email,key);
 
