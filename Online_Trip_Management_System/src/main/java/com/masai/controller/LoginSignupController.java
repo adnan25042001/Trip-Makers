@@ -74,13 +74,15 @@ public class LoginSignupController {
 
 	}
 
-	@DeleteMapping("/closeaccount/{authkey}")
-	public ResponseEntity<String> deleteCustomerAccount(@PathVariable("authkey") String authKey) {
-
-		String msg = ics.deleteCustomer(authKey);
-
-		return new ResponseEntity<String>(msg, HttpStatus.OK);
-
-	}
+	/*
+	 * @DeleteMapping("/closeaccount/{authkey}") public ResponseEntity<String>
+	 * deleteCustomerAccount(@PathVariable("authkey") String authKey) {
+	 * 
+	 * // String msg = ics.deleteCustomer(authKey);
+	 * 
+	 * return new ResponseEntity<String>(msg, HttpStatus.OK);
+	 * 
+	 * }
+	 */
 
 }

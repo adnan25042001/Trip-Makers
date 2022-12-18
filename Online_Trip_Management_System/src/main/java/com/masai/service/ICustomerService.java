@@ -10,12 +10,12 @@ public interface ICustomerService {
 
 	public CustomerDto updateCustomer(CustomerDto cusDto, String key);
 
-	public String deleteCustomer(String key);
 
-	public CustomerDto viewCustomerbyId(Integer id);
 
-	public List<CustomerDto> viewallCustomer();
+	public CustomerDto viewCustomerbyEmail(String email,String key);
 
-	public String giveFeedback(Feedback feedback) throws CustomerException;
+	public List<CustomerDto> viewallCustomer(String key);
+
+	public String giveFeedback(Feedback feedback,String key) throws CustomerException;
 
 }
