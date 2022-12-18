@@ -22,13 +22,16 @@ public interface CustomerDao extends JpaRepository<Customer, Integer> {
 	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.customerId=?1")
 	public Optional<CustomerDto> getCustomerDto(Integer id);
 
+	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.email=?1")
+	public Optional<CustomerDto> getCustomerDtoByEmail(String email);
+
 	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c")
 	public List<CustomerDto> getAllCustomerDto();
 
-	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.customerId=?1")
+	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.address=?1")
 	public List<CustomerDto> getCustomerDtoByAddress(String address);
 
-	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.customerId=?1")
+	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.name=?1")
 	public List<CustomerDto> getCustomerDtoByName(String name);
 
 }

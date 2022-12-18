@@ -1,9 +1,14 @@
 package com.masai.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -49,5 +54,17 @@ public class Admin {
 	@NotEmpty
 	@Size(min = 3, max = 30, message = "Address shuld contain minimum 3 and maximum 30 character")
 	private String companyName;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinColumn(referencedColumnName = "busId")
+	private List<Bus> buses;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinColumn(referencedColumnName = "hotelId")
+	private List<Hotel> hotels;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinColumn(referencedColumnName = "packageId")
+	private List<Package> packages;
 
 }

@@ -19,7 +19,7 @@ public class Hotel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer hotelid;
+	private Integer hotelId;
 	@NotNull
 	@Size(min = 3, max = 20, message = " Hotel Name should contain minimum 3 and maximum 20 character")
 	private String hotelname;
