@@ -16,6 +16,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,12 +55,11 @@ public class Package {
 	@NotBlank
 	@NotEmpty
 	private Integer packageCost;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(referencedColumnName = "hotelid")
-	private Hotel hotel;
-
+    
 	@ManyToMany(cascade = CascadeType.ALL)
-	private List<Customer> customer; 
+	@JsonIgnore
+	private List<Customer> customer;
+	
+	
 
 }

@@ -7,7 +7,9 @@ import com.masai.exception.PackageException;
 
 public interface PackageService {
 
-	public Package addPackage(Package pack ,String key) throws PackageException;
+	public Package createPackage(Package pack ,String key) throws PackageException;
+	
+	public Package updatePackage(Package pack, String key)throws PackageException;
 	
 	public Package deletePackagebyId(Integer packageId,String key) throws PackageException;
 	
@@ -15,8 +17,6 @@ public interface PackageService {
 	
 	public List<Package> viewAllPackage() throws PackageException;
 	
-	public PackageDto bookPackage(Integer packageId, String key)throws PackageException;
 	
-	public String removePackage(Integer packageId,String key)throws PackageException;
 
 }

@@ -30,7 +30,7 @@ public class PackageServiceImpl implements PackageService {
 	private CustomerDao cdao;
 
 	@Override
-	public Package addPackage(Package pack, String key) throws PackageException {
+	public Package createPackage(Package pack, String key) throws PackageException {
 
 		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
 
@@ -95,51 +95,22 @@ public class PackageServiceImpl implements PackageService {
 
 	}
 
+	
 	@Override
-	public PackageDto bookPackage(Integer packageId, String key) throws PackageException {
-
-		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
-
-		if (optCurrcustomer.isEmpty())
-			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
-
-		Customer customer = cdao.findByEmail(optCurrcustomer.get().getEmail())
-				.orElseThrow(() -> new CustomerException("Customer does not exist"));
-
-		Package p = pdao.findById(packageId)
-				.orElseThrow(() -> new PackageException("Package does not exist with packageId:- " + packageId));
-
-		customer.getPackages().add(p);
-		p.getCustomer().add(customer);
-
-		cdao.save(customer);
-		pdao.save(p);
-
-		PackageDto packagedto = pdao.getPackageDto(packageId);
-		return packagedto;
-		
-	}
-
-	@Override
-	public String removePackage(Integer packageId, String key) throws PackageException {
-		
-		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
+	public Package updatePackage(Package pack, String key) throws PackageException {
+		 
+Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
 		
 		if (optCurrcustomer.isEmpty()) 
 			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
 	
-
-		Customer customer = cdao.findByEmail(optCurrcustomer.get().getEmail())
-				.orElseThrow(() -> new CustomerException("Customer does not exist"));
-
-		Package p = pdao.findById(packageId)
-				.orElseThrow(() -> new PackageException("Package does not exist with packageId:- " + packageId));
-
-		customer.getPackages().remove(p);
 		
-		cdao.save(customer);
-		
-		return "Package Removed Successfully";
+		Optional<Package> getPkg = pdao.findById(pack.getPackageId());
+		 if(!getPkg.isPresent()) {
+			throw new PackageException("Package Not Found with Id : "+pack.getPackageId());
+		}
+		Package packageUpdated  = pdao.save(pack);
+		return packageUpdated;
 		
 	}
 
