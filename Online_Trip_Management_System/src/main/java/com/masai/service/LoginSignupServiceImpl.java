@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.masai.exception.AdminException;
 import com.masai.exception.CustomerException;
-import com.masai.exception.LoginException;
 import com.masai.model.Admin;
 import com.masai.model.AdminSignupDto;
 import com.masai.model.CurrentUserSession;
@@ -45,16 +44,13 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 		Admin admin = opt.get();
 
-		if (admin.getPassword() != user.getPassword())
+		if (!admin.getPassword().equals(user.getPassword()))
 			throw new AdminException("Wrong password!");
 
 		Optional<CurrentUserSession> opt1 = usdao.findByEmail(user.getEmail());
 
 		if (opt1.isPresent())
 			throw new AdminException("Admin already logged in!");
-
-		if (opt1.get().getUserType().equals(UserType.CUSTOMER))
-			throw new AdminException("Wrong email and password!");
 
 		SessionDto sdt = new SessionDto();
 		sdt.setAuthkey(RandomString.make(6));
@@ -75,23 +71,21 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 	@Override
 	public SessionDto loginCustomer(UserDto user) {
 
-		Optional<Customer> opt = cdao.findByEmail(user.getEmail());
+		System.out.println(user);
 
-		if (opt.isEmpty())
-			throw new CustomerException("Email not found : " + user.getEmail());
+		Customer customer = cdao.findByEmail(user.getEmail())
+				.orElseThrow(() -> new CustomerException("Email not found : " + user.getEmail()));
 
-		Customer customer = opt.get();
-
-		if (customer.getPassword() != user.getPassword())
+		if (!customer.getPassword().equals(user.getPassword()))
 			throw new CustomerException("Wrong password!");
 
 		Optional<CurrentUserSession> opt1 = usdao.findByEmail(user.getEmail());
 
-		if (opt1.isPresent())
-			throw new AdminException("Customer already logged in!");
+		if (opt1.isPresent()) {
 
-		if (opt1.get().getUserType().equals(UserType.ADMIN))
-			throw new AdminException("Wrong email and password!");
+			throw new CustomerException("Customer already logged in!");
+
+		}
 
 		SessionDto sdt = new SessionDto();
 		sdt.setAuthkey(RandomString.make(6));
@@ -187,15 +181,6 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 		return sdt;
 
-	}
-
-	@Override
-	public boolean isLoggedInByUUID(String authKey) {
-		Optional<CurrentUserSession> opt = usdao.findByAuthKey(authKey);
-		if (opt.isPresent()&& opt.get().getUserType().equals(UserType.ADMIN))
-			return true;
-		else
-			throw new AdminException("LogIn first!!!");
 	}
 
 	@Override

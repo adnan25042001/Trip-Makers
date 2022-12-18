@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -47,6 +48,7 @@ public class Booking {
 	private LocalDateTime date;
   
 	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinColumn(referencedColumnName = "customerId")
 	private List<Customer> customers ;
 	
 }

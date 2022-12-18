@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.masai.exception.AdminException;
 import com.masai.exception.BusException;
+import com.masai.exception.RouteException;
 import com.masai.model.Bus;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Route;
 import com.masai.model.UserType;
+import com.masai.repository.AdminDao;
 import com.masai.repository.BusDao;
+import com.masai.repository.RouteDao;
 import com.masai.repository.UserSessionDao;
 
 @Service
@@ -23,6 +26,12 @@ public class BusServiceImpl implements BusService {
 
 	@Autowired
 	private BusDao bdao;
+
+	@Autowired
+	private AdminDao adao;
+
+	@Autowired
+	private RouteDao rdao;
 
 	@Override
 	public Bus addBus(Bus bus, String authKey) throws BusException {
@@ -100,7 +109,24 @@ public class BusServiceImpl implements BusService {
 
 	@Override
 	public Route addRoute(String busNo, Integer routeId, String authKey) {
-		return null;
+
+		CurrentUserSession cus = usdao.findByAuthKey(authKey)
+				.orElseThrow(() -> new AdminException("Invalid authKey : " + authKey));
+
+		adao.findByEmail(cus.getEmail()).orElseThrow(() -> new AdminException("Invalid email id : " + cus.getEmail()));
+
+		Bus bus = bdao.findByBusNo(busNo).orElseThrow(() -> new BusException("Bus not found with busNo : " + busNo));
+
+		Route route = rdao.findById(routeId).orElseThrow(() -> new RouteException("Invalid route Id : " + routeId));
+
+//		bus.setRoute(route);
+//		route.getBuses().add(bus);
+
+		bdao.save(bus);
+		rdao.save(route);
+
+		return route;
+
 	}
 
 }
