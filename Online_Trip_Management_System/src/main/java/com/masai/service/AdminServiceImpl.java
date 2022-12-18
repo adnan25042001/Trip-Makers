@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 
 import com.masai.exception.FeedbackException;
 import com.masai.exception.CustomerException;
+import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
 import com.masai.model.CustomerDto;
 import com.masai.model.Feedback;
+import com.masai.model.UserType;
 import com.masai.repository.CustomerDao;
 import com.masai.repository.FeedbackDao;
+import com.masai.repository.UserSessionDao;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -22,71 +25,143 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private FeedbackDao fDao;
+	
+	@Autowired
+	private UserSessionDao uSesDao;
 
 	@Override
-	public CustomerDto getCustomerById(Integer customerId) throws CustomerException {
-
-		Optional<CustomerDto> opt = cDao.getCustomerDto(customerId);
-
-		if (opt.isEmpty())
-			throw new CustomerException("User not found with id :" + customerId);
-
-		CustomerDto customer = opt.get();
-
-		return customer;
+	public CustomerDto getCustomerByEmail(String email,String key) throws CustomerException {
+		
+		Optional<CurrentUserSession> optCurrcustomer =uSesDao.findByAuthKey(key);
+		if(optCurrcustomer.isPresent()) {
+			CurrentUserSession anew =optCurrcustomer.get();
+			
+			if(anew.getUserType().equals(UserType.ADMIN)) {
+				
+				 Optional<CustomerDto> cnew=cDao.getCustomerDtoByEmail(email);
+				 if(cnew.isPresent()) {
+					 CustomerDto cnewdto=cnew.get();
+					 return cnewdto;
+				 }
+				 else {
+					 throw new CustomerException("User not found with this email :"+email);
+				 }
+			}
+			else {
+				throw new CustomerException("You are not an admin. Please log in as admin");
+			}
+		}
+		else {
+			throw new CustomerException("Invalid Admin Authentication key");
+		}
 
 	}
 
 	@Override
-	public List<CustomerDto> getAllCustomerDetails() throws CustomerException {
+	public List<CustomerDto> getAllCustomerDetails(String key) throws CustomerException {
 
-		List<CustomerDto> customers = cDao.getAllCustomerDto();
-
-		if (customers.size() == 0)
-			throw new CustomerException("No user found!");
-
-		return customers;
-
-	}
-
-	@Override
-	public List<CustomerDto> getCustomerDetailsByAddress(String address) throws CustomerException {
-
-		List<CustomerDto> customers = cDao.getCustomerDtoByAddress(address);
-
-		if (customers.size() == 0)
-			throw new CustomerException("No user found in this address :" + address);
-
-		return customers;
-
-	}
-
-	@Override
-	public List<CustomerDto> getCustomerDetailsByName(String name) throws CustomerException {
-
-		List<CustomerDto> customers = cDao.getCustomerDtoByName(name);
-
-		if (customers.size() == 0)
-			throw new CustomerException("No user found with this name :" + name);
-
-		return customers;
+		Optional<CurrentUserSession> optCurrcustomer =uSesDao.findByAuthKey(key);
+		if(optCurrcustomer.isPresent()) {
+			CurrentUserSession anew =optCurrcustomer.get();
+			
+			if(anew.getUserType().equals(UserType.ADMIN)) {
+				
+				 List<CustomerDto> cnew=cDao.getAllCustomerDto();
+				 if(cnew.size()>0) {
+					 return cnew;
+				 }
+				 else {
+					 throw new CustomerException("No user found!!");
+				 }
+			}
+			else {
+				throw new CustomerException("You are not an admin. Please log in as admin");
+			}
+		}
+		else {
+			throw new CustomerException("Invalid Auth Key");
+		}
 
 	}
 
 	@Override
-	public List<Feedback> getAllFeedbackByCustomerId(Integer cid) throws CustomerException, FeedbackException {
+	public List<CustomerDto> getCustomerDetailsByAddress(String address,String key) throws CustomerException {
 
-		Optional<Customer> existedCustomer = cDao.findById(cid);
+		Optional<CurrentUserSession> optCurrcustomer =uSesDao.findByAuthKey(key);
+		if(optCurrcustomer.isPresent()) {
+			CurrentUserSession anew =optCurrcustomer.get();
+			
+			if(anew.getUserType().equals(UserType.ADMIN)) {
+				
+				 List<CustomerDto> cnew=cDao.getCustomerDtoByAddress(address);
+				 if(cnew.size()>0) {
+					 return cnew;
+				 }
+				 else {
+					 throw new CustomerException("No user found!!");
+				 }
+			}
+			else {
+				throw new CustomerException("You are not an admin. Please log in as admin");
+			}
+		}
+		else {
+			throw new CustomerException("Invalid Auth Key");
+		}
 
-		if (existedCustomer.isEmpty())
-			throw new CustomerException("No user found with this customerId :" + cid);
+	}
 
-		List<Feedback> feedbacks = fDao.findByCustomerId(cid);
+	@Override
+	public List<CustomerDto> getCustomerDetailsByName(String name,String key) throws CustomerException {
 
-		if (feedbacks.size() == 0)
-			throw new FeedbackException("No feedback given by this customerId :" + cid);
+		Optional<CurrentUserSession> optCurrcustomer =uSesDao.findByAuthKey(key);
+		if(optCurrcustomer.isPresent()) {
+			CurrentUserSession anew =optCurrcustomer.get();
+			
+			if(anew.getUserType().equals(UserType.ADMIN)) {
+				
+				 List<CustomerDto> cnew=cDao.getCustomerDtoByName(name);
+				 if(cnew.size()>0) {
+					 return cnew;
+				 }
+				 else {
+					 throw new CustomerException("No user found!!");
+				 }
+			}
+			else {
+				throw new CustomerException("You are not an admin. Please log in as admin");
+			}
+		}
+		else {
+			throw new CustomerException("Invalid Auth Key");
+		}
+	}
 
-		return feedbacks;
+	@Override
+	public List<Feedback> getAllFeedbackByCustomerId(Integer id,String key) throws CustomerException, FeedbackException {
+
+		
+		Optional<CurrentUserSession> optCurrcustomer =uSesDao.findByAuthKey(key);
+		if(optCurrcustomer.isPresent()) {
+			CurrentUserSession anew =optCurrcustomer.get();
+			
+			if(anew.getUserType().equals(UserType.ADMIN)) {
+				
+				 List<Feedback> feedbacks=fDao.findByCustomerId(id);
+				 if(feedbacks.size()>0) {
+					 return feedbacks;
+				 }
+				 else {
+					 throw new CustomerException("No feedback given!!");
+				 }
+			}
+			else {
+				throw new CustomerException("You are not an admin. Please log in as admin");
+			}
+		}
+		else {
+			throw new CustomerException("Invalid Auth Key");
+		}
 
 	}
 
@@ -98,14 +173,29 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Feedback> getAllFeedback() throws FeedbackException {
+	public List<Feedback> getAllFeedback(String key) throws FeedbackException {
 
-		List<Feedback> feedbacks = fDao.findAll();
-
-		if (feedbacks.size() > 0)
-			throw new FeedbackException("No feedback found.");
-
-		return feedbacks;
+		Optional<CurrentUserSession> optCurrcustomer =uSesDao.findByAuthKey(key);
+		if(optCurrcustomer.isPresent()) {
+			CurrentUserSession anew =optCurrcustomer.get();
+			
+			if(anew.getUserType().equals(UserType.ADMIN)) {
+				
+				 List<Feedback> feedbacks=fDao.findAll();
+				 if(feedbacks.size()>0) {
+					 return feedbacks;
+				 }
+				 else {
+					 throw new CustomerException("No feedback given!!");
+				 }
+			}
+			else {
+				throw new CustomerException("You are not an admin. Please log in as admin");
+			}
+		}
+		else {
+			throw new CustomerException("Invalid Auth Key");
+		}
 
 	}
 
