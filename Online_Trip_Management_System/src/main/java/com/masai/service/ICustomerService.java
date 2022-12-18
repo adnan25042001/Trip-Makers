@@ -16,6 +16,6 @@ public interface ICustomerService {
 
 	public List<CustomerDto> viewallCustomer();
 
-	public String giveFeedback(Feedback feedback) throws CustomerException;
+	public String giveFeedback(Feedback feedback,String key) throws CustomerException;
 
 }
