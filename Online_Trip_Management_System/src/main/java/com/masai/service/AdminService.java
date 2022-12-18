@@ -9,18 +9,25 @@ import com.masai.model.Feedback;
 
 public interface AdminService {
 
-	public CustomerDto getCustomerById(Integer customerId)throws CustomerException;
+	//****
+	public CustomerDto getCustomerByEmail(String email,String key)throws CustomerException;
 	
-	public List<CustomerDto> getAllCustomerDetails()throws CustomerException;
+	//*****
+	public List<CustomerDto> getAllCustomerDetails(String key)throws CustomerException;
 	
-	public List<CustomerDto> getCustomerDetailsByAddress(String address)throws CustomerException;
+	//****
+	public List<CustomerDto> getCustomerDetailsByAddress(String address,String key)throws CustomerException;
 	
-	public List<CustomerDto> getCustomerDetailsByName(String name)throws CustomerException;
+	//****
+	public List<CustomerDto> getCustomerDetailsByName(String name,String key)throws CustomerException;
 	
-	public List<Feedback> getAllFeedbackByCustomerId(Integer cid)throws CustomerException,FeedbackException;
+	//*****
+	public List<Feedback> getAllFeedbackByCustomerId(Integer id,String key)throws CustomerException,FeedbackException;
 	
+	//****
 	public Feedback getFeedbackById(Integer fid)throws FeedbackException;
 	
-	public List<Feedback> getAllFeedback()throws FeedbackException;
+	//*****
+	public List<Feedback> getAllFeedback(String key)throws FeedbackException;
 	
 }

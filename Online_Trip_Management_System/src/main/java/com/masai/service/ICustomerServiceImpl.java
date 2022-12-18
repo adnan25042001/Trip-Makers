@@ -120,18 +120,33 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 	}
 
+	
+	//Rajibul
 	@Override
-	public String giveFeedback(Feedback feedback) throws CustomerException {
+	public String giveFeedback(Feedback feedback,String key) throws CustomerException {
+		
+		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
+		
+		if(optCurrcustomer.isPresent()) {
+			
+			CurrentUserSession cnew = optCurrcustomer.get();
+			
+			if (cnew.getUserType().equals(UserType.ADMIN))
+				throw new CustomerException("Please log in as a User");
 
-		Optional<Customer> existedCustomer = cusDao.findById(feedback.getCustomerId());
-		
-		if (existedCustomer.isPresent()) {
-			feedback.setDate(LocalDateTime.now());
-			fDao.save(feedback);
-			return "Thank You for your feedback.";
+			Optional<Customer> existedCustomer = cusDao.findByEmail(cnew.getEmail());
+			
+			
+			if (existedCustomer.isPresent()) {
+				feedback.setDate(LocalDateTime.now());
+				fDao.save(feedback);
+				return "Thank You for your feedback.";
+			}
 		}
+
 		
-		throw new CustomerException("Please pass a valid userId");
+		
+		throw new CustomerException("Invalid Authentication Id of Customer :" + key);
 		
 	}
 }
