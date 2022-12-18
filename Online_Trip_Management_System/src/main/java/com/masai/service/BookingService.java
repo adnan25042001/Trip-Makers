@@ -3,21 +3,21 @@ package com.masai.service;
 import java.util.List;
 
 import com.masai.exception.BookingException;
+import com.masai.exception.PackageException;
 import com.masai.model.Booking;
 import com.masai.model.BookingDto;
+import com.masai.model.PackageDto;
 
 public interface BookingService {
+	
+public PackageDto bookPackage(Integer packageId, String key)throws PackageException;
+	
+	public String cancelPackage(Integer packageId,String key)throws PackageException;
 
-	public Booking addBooking(Booking booking, String key) throws BookingException;
+	public Booking viewBooking(Integer bookingId,String key) throws BookingException;
 
-	public Booking DeleteBooking(Integer bookingId, String key) throws BookingException;
+	public List<Booking> viewAllBookings(String key) throws BookingException;
 
-	public Booking viewBooking(Integer bookingId) throws BookingException;
-
-	public List<Booking> viewAllBookings() throws BookingException;
-
-	public BookingDto booking(Integer bookingId, String key) throws BookingException;
-
-	public String cancelBooking(Integer bookingID, String key) throws BookingException;
+	
 	
 }

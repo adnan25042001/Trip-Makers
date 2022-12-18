@@ -8,13 +8,17 @@ import org.springframework.stereotype.Service;
 
 import com.masai.exception.BookingException;
 import com.masai.exception.CustomerException;
+import com.masai.exception.PackageException;
 import com.masai.model.Booking;
 import com.masai.model.BookingDto;
 import com.masai.model.CurrentUserSession;
 import com.masai.model.Customer;
+import com.masai.model.Package;
+import com.masai.model.PackageDto;
 import com.masai.model.UserType;
 import com.masai.repository.BookingDao;
 import com.masai.repository.CustomerDao;
+import com.masai.repository.PackageDao;
 import com.masai.repository.UserSessionDao;
 
 @Service
@@ -28,47 +32,67 @@ public class BookingServiceImpl implements BookingService {
 
 	@Autowired
 	private UserSessionDao uSesDao;
-
+	@Autowired
+	private PackageDao pdao;
 	@Override
-	public Booking addBooking(Booking booking, String key) throws BookingException {
+	public PackageDto bookPackage(Integer packageId, String key) throws PackageException {
 
 		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
 
 		if (optCurrcustomer.isEmpty())
 			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
 
-		return bDao.save(booking);
+		Customer customer = cdao.findByEmail(optCurrcustomer.get().getEmail())
+				.orElseThrow(() -> new CustomerException("Customer does not exist"));
 
+		Package p = pdao.findById(packageId)
+				.orElseThrow(() -> new PackageException("Package does not exist with packageId:- " + packageId));
+
+		customer.getPackages().add(p);
+		p.getCustomer().add(customer);
+
+		cdao.save(customer);
+		pdao.save(p);
+
+		PackageDto packagedto = pdao.getPackageDto(packageId);
+		return packagedto;
+		
 	}
 
 	@Override
-	public Booking DeleteBooking(Integer bookingId, String key) throws BookingException {
-
+	public String cancelPackage(Integer packageId, String key) throws PackageException {
+		
 		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
-
-		if (optCurrcustomer.isEmpty())
+		
+		if (optCurrcustomer.isEmpty()) 
 			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
+	
 
-		if (optCurrcustomer.get().getUserType().equals(UserType.ADMIN))
-			throw new CustomerException("Invalid Authentication key : " + key);
+		Customer customer = cdao.findByEmail(optCurrcustomer.get().getEmail())
+				.orElseThrow(() -> new CustomerException("Customer does not exist"));
 
-		Booking booking = bDao.findById(bookingId).orElseThrow(() -> new BookingException("Invalid Booking ID"));
+		Package p = pdao.findById(packageId)
+				.orElseThrow(() -> new PackageException("Package does not exist with packageId:- " + packageId));
 
-		bDao.delete(booking);
-
-		return booking;
-
+		customer.getPackages().remove(p);
+		
+		cdao.save(customer);
+		
+		return "Package Removed Successfully";
+		
 	}
 
+
+
 	@Override
-	public Booking viewBooking(Integer bookingId) throws BookingException {
+	public Booking viewBooking(Integer bookingId,String key) throws BookingException {
 
 		return bDao.findById(bookingId).orElseThrow(() -> new BookingException("BOokingId is not available"));
 
 	}
 
 	@Override
-	public List<Booking> viewAllBookings() throws BookingException {
+	public List<Booking> viewAllBookings(String key) throws BookingException {
 
 		List<Booking> allBookings = bDao.findAll();
 
@@ -80,56 +104,6 @@ public class BookingServiceImpl implements BookingService {
 
 	}
 
-	@Override
-	public BookingDto booking(Integer bookingId, String key) throws BookingException {
-
-		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
-
-		if (optCurrcustomer.isEmpty())
-			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
-
-		if (optCurrcustomer.get().getUserType().equals(UserType.ADMIN))
-			throw new CustomerException("Invalid authKey : " + key);
-
-		Customer customer = cdao.findByEmail(optCurrcustomer.get().getEmail())
-				.orElseThrow(() -> new CustomerException("Customer does not exist"));
-
-		Booking b = bDao.findById(bookingId)
-				.orElseThrow(() -> new BookingException("BooingId :- " + bookingId + "is not available"));
-
-		customer.getBookings().add(b);
-		b.getCustomers().add(customer);
-
-		cdao.save(customer);
-		bDao.save(b);
-
-		BookingDto bdto = bDao.getBookingDto(bookingId);
-		return bdto;
-
-	}
-
-	@Override
-	public String cancelBooking(Integer bookingID, String key) throws BookingException {
-
-		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
-
-		if (optCurrcustomer.isEmpty())
-			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
-
-		Customer customer = cdao.findByEmail(optCurrcustomer.get().getEmail())
-				.orElseThrow(() -> new CustomerException("Customer does not exist"));
-
-		Booking b = bDao.findById(bookingID)
-				.orElseThrow(() -> new BookingException("BooingId :- " + bookingID + "is not available"));
-
-		customer.getBookings().remove(b);
-		b.getCustomers().remove(customer);
-
-		cdao.save(customer);
-		bDao.save(b);
-
-		return "Canceled booking";
-
-	}
+	
 
 }
