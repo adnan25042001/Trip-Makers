@@ -192,10 +192,10 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 	@Override
 	public boolean isLoggedInByUUID(String authKey) {
 		Optional<CurrentUserSession> opt = usdao.findByAuthKey(authKey);
-		if (opt.isPresent())
+		if (opt.isPresent()&& opt.get().getUserType().equals(UserType.ADMIN))
 			return true;
 		else
-			throw new LoginException("LogIn first!!!");
+			throw new AdminException("LogIn first!!!");
 	}
 
 	@Override

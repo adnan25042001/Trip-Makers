@@ -29,6 +29,8 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	private UserSessionDao uSesDao;
+	
+//	for customer only
 
 	@Override
 	public CustomerDto updateCustomer(CustomerDto cusDto, String key) {
@@ -39,6 +41,7 @@ public class ICustomerServiceImpl implements ICustomerService {
 			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
 
 		CurrentUserSession cnew = optCurrcustomer.get();
+		
 
 		if (cnew.getUserType().equals(UserType.ADMIN))
 			throw new CustomerException("Customer not found with email : " + cnew.getEmail());
@@ -64,52 +67,60 @@ public class ICustomerServiceImpl implements ICustomerService {
 		if (!cusDto.getMobile().equals(null)) {
 			cust.setMobile(cusDto.getMobile());
 		}
+		
 
-		cusDao.save(cust);
+		Customer c=cusDao.save(cust);
 		CustomerDto cDto = new CustomerDto();
-		cDto.setAddress(cust.getAddress());
-		cDto.setCustomerName(cust.getName());
-		cDto.setEmail(cust.getEmail());
-		cDto.setMobile(cust.getMobile());
+		cDto.setAddress(c.getAddress());
+		cDto.setCustomerName(c.getName());
+		cDto.setEmail(c.getEmail());
+		cDto.setMobile(c.getMobile());
+		cnew.setEmail(c.getEmail());
 
+//		System.out.println(cDto);
 		return cDto;
 
 	}
+	
+
+
+	
+	
+//	both for admin and customer
 
 	@Override
-	public String deleteCustomer(String key) {
+	public CustomerDto viewCustomerbyEmail(String email,String key) {
+		
+		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
+
+		if (optCurrcustomer.isEmpty())
+			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
+
+		CurrentUserSession cnew = optCurrcustomer.get();
+             
+		Optional<CustomerDto> opt = cusDao.getCustomerDtoByEmail(email);
+
+		return opt.orElseThrow(() -> new CustomerException("Customer not found"));
+
+	}
+	
+//	for admin only
+
+	@Override
+	public List<CustomerDto> viewallCustomer(String key) {
+		
 
 		Optional<CurrentUserSession> cnew = uSesDao.findByAuthKey(key);
+		
+		
 
 		if (cnew.isEmpty())
 			throw new CustomerException("Customer is not logged in");
 
 		CurrentUserSession curr = cnew.get();
-
-		Optional<Customer> opt = cusDao.findByEmail(curr.getEmail());
-
-		if (opt.isEmpty())
+		
+		if (curr.getUserType().equals(UserType.CUSTOMER))
 			throw new CustomerException("Customer not found with email : " + curr.getEmail());
-
-		cusDao.delete(opt.get());
-
-		uSesDao.delete(curr);
-
-		return "Customer Deleted Successfully";
-
-	}
-
-	@Override
-	public CustomerDto viewCustomerbyId(Integer id) {
-
-		Optional<CustomerDto> opt = cusDao.getCustomerDto(id);
-
-		return opt.orElseThrow(() -> new CustomerException("Customer not found"));
-
-	}
-
-	@Override
-	public List<CustomerDto> viewallCustomer() {
 
 		List<CustomerDto> customers = cusDao.getAllCustomerDto();
 
