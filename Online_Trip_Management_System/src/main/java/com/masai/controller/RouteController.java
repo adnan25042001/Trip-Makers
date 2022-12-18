@@ -58,8 +58,8 @@ public class RouteController {
 
 	}
 
-	@GetMapping("/routebypickuppoint/{authKey}")
-	public ResponseEntity<List<Route>> getRouteByPickupPointHandler(@PathVariable String authKey) {
+	@GetMapping("/allroutes/{authKey}")
+	public ResponseEntity<List<Route>> getAllRoutesHandler(@PathVariable String authKey) {
 
 		return new ResponseEntity<List<Route>>(rService.getAllRoute(authKey), HttpStatus.OK);
 

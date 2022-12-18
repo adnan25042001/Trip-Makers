@@ -6,14 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.masai.model.Package;
-import com.masai.model.PackageDto;
 import com.masai.model.UserType;
 import com.masai.exception.AdminException;
 import com.masai.exception.CustomerException;
 import com.masai.exception.PackageException;
 import com.masai.model.CurrentUserSession;
-import com.masai.model.Customer;
-import com.masai.repository.CustomerDao;
 import com.masai.repository.PackageDao;
 import com.masai.repository.UserSessionDao;
 
@@ -25,9 +22,6 @@ public class PackageServiceImpl implements PackageService {
 
 	@Autowired
 	private UserSessionDao uSesDao;
-
-	@Autowired
-	private CustomerDao cdao;
 
 	@Override
 	public Package createPackage(Package pack, String key) throws PackageException {
@@ -95,23 +89,21 @@ public class PackageServiceImpl implements PackageService {
 
 	}
 
-	
 	@Override
 	public Package updatePackage(Package pack, String key) throws PackageException {
-		 
-Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
-		
-		if (optCurrcustomer.isEmpty()) 
+
+		Optional<CurrentUserSession> optCurrcustomer = uSesDao.findByAuthKey(key);
+
+		if (optCurrcustomer.isEmpty())
 			throw new CustomerException("Invalid Authentication Id of Customer :" + key);
-	
-		
+
 		Optional<Package> getPkg = pdao.findById(pack.getPackageId());
-		 if(!getPkg.isPresent()) {
-			throw new PackageException("Package Not Found with Id : "+pack.getPackageId());
+		if (!getPkg.isPresent()) {
+			throw new PackageException("Package Not Found with Id : " + pack.getPackageId());
 		}
-		Package packageUpdated  = pdao.save(pack);
+		Package packageUpdated = pdao.save(pack);
 		return packageUpdated;
-		
+
 	}
 
 }

@@ -16,7 +16,6 @@ import com.masai.model.AdminSignupDto;
 import com.masai.model.CustomerSignupDto;
 import com.masai.model.SessionDto;
 import com.masai.model.UserDto;
-import com.masai.service.ICustomerService;
 import com.masai.service.LoginSignupService;
 
 @RestController
@@ -25,9 +24,6 @@ public class LoginSignupController {
 
 	@Autowired
 	private LoginSignupService lss;
-
-	@Autowired
-	private ICustomerService ics;
 
 	@PostMapping("/login/customer")
 	public ResponseEntity<SessionDto> customerLoginHandler(@Valid @RequestBody UserDto user) {
@@ -74,15 +70,11 @@ public class LoginSignupController {
 
 	}
 
-	/*
-	 * @DeleteMapping("/closeaccount/{authkey}") public ResponseEntity<String>
-	 * deleteCustomerAccount(@PathVariable("authkey") String authKey) {
-	 * 
-	 * // String msg = ics.deleteCustomer(authKey);
-	 * 
-	 * return new ResponseEntity<String>(msg, HttpStatus.OK);
-	 * 
-	 * }
-	 */
+	@DeleteMapping("/closeaccount/{authkey}")
+	public ResponseEntity<String> deleteCustomerAccount(@PathVariable("authkey") String authKey) {
+
+		return new ResponseEntity<String>(lss.deleteAccout(authKey), HttpStatus.OK);
+
+	}
 
 }

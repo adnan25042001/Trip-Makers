@@ -18,12 +18,6 @@ public interface CustomerDao extends JpaRepository<Customer, Integer> {
 	public abstract List<Customer> findByAddress(String address);
 
 	public abstract List<Customer> findByName(String name);
-	
-	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.email=?1")
-	public Optional<CustomerDto> getCustomerDtoByEmail(String email);
-
-	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.email=?1")
-	public Optional<CustomerDto> getCustomerDtoByEmail(String email);
 
 	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.email=?1")
 	public Optional<CustomerDto> getCustomerDtoByEmail(String email);
@@ -36,7 +30,7 @@ public interface CustomerDao extends JpaRepository<Customer, Integer> {
 
 	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.name=?1")
 	public List<CustomerDto> getCustomerDtoByName(String name);
-	
+
 	@Query("select new com.masai.model.CustomerDto(c.name, c.email, c.address, c.mobile) from Customer c where c.customerId=?1")
 	public Optional<CustomerDto> getCustomerDto(Integer id);
 

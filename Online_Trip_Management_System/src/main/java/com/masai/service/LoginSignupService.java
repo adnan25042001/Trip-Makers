@@ -22,4 +22,6 @@ public interface LoginSignupService {
 
 	public String logout(String authKey) throws CustomerException, AdminException;
 
+	public String deleteAccout(String authKey) throws CustomerException;
+
 }

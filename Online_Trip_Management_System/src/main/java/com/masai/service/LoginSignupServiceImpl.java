@@ -199,4 +199,20 @@ public class LoginSignupServiceImpl implements LoginSignupService {
 
 	}
 
+	@Override
+	public String deleteAccout(String authKey) throws CustomerException {
+
+		CurrentUserSession cus = usdao.findByAuthKey(authKey)
+				.orElseThrow(() -> new RuntimeException("User is not logged in!"));
+
+		Customer customer = cdao.findByEmail(cus.getEmail())
+				.orElseThrow(() -> new CustomerException("User does not exist!"));
+
+		cdao.delete(customer);
+		usdao.delete(cus);
+
+		return "User deleted successfully...";
+
+	}
+
 }
