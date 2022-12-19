@@ -7,6 +7,15 @@
 
 The backend of online trip management where the admin can log in to the system and can manage the features of the website. And the customer can also log in and perform activities such as view routes, hotels, and packages and can also book, cancel and print ticket details and provide feedback too.
 
+
+## Authors
+
+- [Adnan Hussain](https://github.com/adnan25042001)
+- [Sarthak Singh](https://github.com/Sarthak0008)
+- [Rakesh Gudur](https://github.com/Rakesh7420)
+- [Rajibul Molla](https://github.com/RaJiBuLmOlLaPGEC)
+
+
 ## Admin Features
 
 - Login into the Application
