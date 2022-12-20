@@ -45,6 +45,10 @@ The backend of online trip management where the admin can log in to the system a
 **Testing:** Postman, Swagger
 
 
+##  Entity Relationship
+![Logo](https://i.ibb.co/TLTdYj2/ER.jpg)
+
+
 ## Run Locally
 
 Clone the project
