@@ -72,9 +72,9 @@ Start the server
 ## Roles and Responsibilities
 - Project management done by [Adnan Hussain](https://github.com/adnan25042001).
 - Login, controller class management and overall bug fixes done by [Adnan Hussain](https://github.com/adnan25042001).
-- Admin, User and Customers related files and exceptions done by [Ranjeet Kumar](https://github.com/ranjeetmasaischool).
-- Booking, Package and Hotel related files and exceptions done by [Rajan Chauhan](https://github.com/rajanchauhan165).
-- Feedback, Report and Tickets related files and exceptions done by [Abhishek Das](https://github.com/abhidas0810).
+- Admin, User and Customers related files and exceptions done by [Sarthak Singh](https://github.com/Sarthak0008).
+- Booking, Package and Hotel related files and exceptions done by [Rakesh Gudur](https://github.com/Rakesh7420).
+- Feedback, Report and Tickets related files and exceptions done by [Rajibul Molla](https://github.com/RaJiBuLmOlLaPGEC).
 - Bus and Route related files and exceptions done by [Adnan Hussain](https://github.com/adnan25042001).
 - Readme.md done by [Adnan Hussain](https://github.com/adnan25042001).
 
