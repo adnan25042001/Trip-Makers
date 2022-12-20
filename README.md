@@ -65,7 +65,7 @@ Run the main file
 
 Start the server
 
- - http://localhost:8888/swagger-ui/index.html
+ - http://localhost:8008/swagger-ui/index.html
 
 ![Logo](https://user-images.githubusercontent.com/78552012/208590820-f889302d-dbcc-435b-a03a-0fd415182af9.png)
 
