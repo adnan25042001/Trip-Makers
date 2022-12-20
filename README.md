@@ -50,7 +50,7 @@ The backend of online trip management where the admin can log in to the system a
 Clone the project
 
 ```bash
-  git clone https://github.com/prayagp8/Trip-Makers.git
+  git clone https://github.com/adnan25042001/Trip-Makers.git
 ```
 
 Go to the project resources
@@ -67,7 +67,7 @@ Start the server
 
  - http://localhost:8888/swagger-ui/index.html
 
-![Logo](https://i.postimg.cc/kM0tpJKd/p2.png)
+![Logo](https://user-images.githubusercontent.com/78552012/208590820-f889302d-dbcc-435b-a03a-0fd415182af9.png)
 
 ## Roles and Responsibilities
 - Project management done by [Adnan Hussain](https://github.com/adnan25042001).
