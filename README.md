@@ -50,7 +50,7 @@ The backend of online trip management where the admin can log in to the system a
 Clone the project
 
 ```bash
-  git clone https://github.com/adnan25042001/Trip-Makers.git
+  https://github.com/adnan25042001/Trip-Makers.git
 ```
 
 Go to the project resources
