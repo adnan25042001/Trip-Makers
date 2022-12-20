@@ -46,7 +46,7 @@ The backend of online trip management where the admin can log in to the system a
 
 
 ##  Entity Relationship
-![Logo](https://i.ibb.co/TLTdYj2/ER.jpg)
+![A1](https://user-images.githubusercontent.com/78552012/208597860-8888b117-75b0-4406-9402-40ddeb58f05f.png)
 
 
 ## Run Locally
